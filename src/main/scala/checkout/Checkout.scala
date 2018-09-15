@@ -3,8 +3,15 @@ package checkout
 case class Item(name: String, price: BigDecimal, nthFree: Integer)
 
 object Items {
-  val apple = Item("apple", .6, 3)
+  val apple = Item("apple", .6, 2)
   val orange = Item("orange", .25, 3)
+}
+
+object Discounter {
+  def applyDiscount(count: Int, foodItem: Item): BigDecimal = {
+    import Math.floorDiv
+    (foodItem.price * count) - floorDiv(count, foodItem.nthFree) * foodItem.price
+  }
 }
 
 object Parser {
@@ -26,7 +33,9 @@ object PriceCalculator {
 
 object Checkout extends App {
   val total = Parser.parse(args)
-    .map(e => e.price)
+    .groupBy(e => e.name)
+    .values
+    .map(e => Discounter applyDiscount(e.size, e.head))
     .sum
   print(total.formatted("%.2f"))
 }

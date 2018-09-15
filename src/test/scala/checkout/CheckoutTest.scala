@@ -57,6 +57,30 @@ class ItemParserTest extends FunSuite {
       assert(thrown.getMessage === i._2)
     }
   }
+}
+
+class DiscounterTest extends FunSuite {
+  val params = List(
+    (Items.orange, 1, 0.25),
+    (Items.orange, 2, 0.5),
+    (Items.orange, 3, 0.5),
+    (Items.orange, 4, 0.75),
+    (Items.orange, 5, 1),
+    (Items.orange, 6, 1),
+    (Items.apple, 1, 0.6),
+    (Items.apple, 2, 0.6),
+    (Items.apple, 3, 1.2),
+    (Items.apple, 4, 1.2),
+    (Items.apple, 5, 1.8),
+    (Items.apple, 6, 1.8)
+  )
+
+  params.foreach { i =>
+    test(s"Given ${i._2} ${i._1.name} discounted prict should be ${i._3}") {
+      assert(Discounter.applyDiscount(i._2, i._1) === i._3)
+    }
+  }
+
 
 }
 
